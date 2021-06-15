@@ -1,7 +1,6 @@
 //! For when a regular `Wrapper<T>(T)` gets too boring.
 
-use rand::distributions::{Distribution, WeightedIndex};
-use rand::thread_rng;
+use rand::{thread_rng, Rng};
 use std::{error::Error, fmt};
 
 /// The wrapper.
@@ -29,11 +28,7 @@ impl<T> ChanceTheWrapper<T> {
     }
 
     fn maybe(&self) -> bool {
-        let choices = [true, false];
-        let weights = [self.chance, 1.0 - self.chance];
-        let dist = WeightedIndex::new(&weights).unwrap();
-        let mut rng = thread_rng();
-        choices[dist.sample(&mut rng)]
+        thread_rng().gen_bool(self.chance)
     }
 
     /// Maybe returns a reference to the value.
